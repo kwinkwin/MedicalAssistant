@@ -132,9 +132,32 @@ namespace MedicalAssistant.Application.Services
             };
             await _messageRepo.AddAsync(userMessage);
 
-            // Gọi AI
-            string aiResponseText = await _aiService.GetAnswerFromAiAsync(request.MessageContent);
+            List<MessageDto> historyDtos = new List<MessageDto>();
 
+            // Chỉ lấy lịch sử nếu đây là cuộc trò chuyện cũ
+            if (request.IdConversation != null && request.IdConversation != Guid.Empty)
+            {
+                var historyQuery = _messageRepo.GetQueryable(x => x.IdConversation == conversation.IdConversation
+                                                               && x.Status == (int)CommonStatus.Active);
+
+                var historyMessages = await historyQuery
+                                            .OrderByDescending(x => x.CreatedDate) // Lấy cái mới nhất trước
+                                            .Take(6) // Lấy 3 cuộc đối thoại gần nhất
+                                            .ToListAsync();
+
+                // Đảo ngược lại để đúng thứ tự thời gian cũ -> mới
+                historyDtos = historyMessages.OrderBy(x => x.CreatedDate)
+                                             .Select(x => new MessageDto
+                                             {
+                                                 Content = x.MessageContent,
+                                                 IsAiResponse = (int)x.IsAiResponse,
+                                                 CreatedDate = (DateTime)x.CreatedDate,
+                                             }).ToList();
+            }
+
+            // Gọi AI
+            string aiResponseText = await _aiService.GetAnswerFromAiAsync(request.MessageContent, historyDtos);
+            
             // Tạo AI message
             var aiMessage = new Message
             {
