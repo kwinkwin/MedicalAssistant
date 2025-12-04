@@ -80,7 +80,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        policy.WithOrigins("http://localhost:5173")
             .AllowAnyMethod()   // GET, POST, PUT, DELETE, ...
             .AllowAnyHeader()  // tất cả header
             .AllowCredentials();                   // .AllowCredentials(); // không dùng khi AllowAnyOrigin()
