@@ -48,7 +48,6 @@ builder.Services
     });
 
 builder.Services.AddAuthorization();
-builder.Services.AddControllers();
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ApiResponseFilter>();
@@ -80,7 +79,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins("http://localhost:5173", "https://medibot-assistant.vercel.app")
             .AllowAnyMethod()   // GET, POST, PUT, DELETE, ...
             .AllowAnyHeader()  // tất cả header
             .AllowCredentials();                   // .AllowCredentials(); // không dùng khi AllowAnyOrigin()
