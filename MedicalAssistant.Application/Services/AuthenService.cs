@@ -36,10 +36,16 @@ namespace MedicalAssistant.Application.Services
         }
         public async Task<string> SignUpAsync(SignUpUserDto dto)
         {
-            var isExistEmployee = await _userRepository.AnyAsync(x => x.Username == dto.Username);
-            if (isExistEmployee)
+            var isExistUsername = await _userRepository.AnyAsync(x => x.Username == dto.Username);
+            if (isExistUsername)
             {
                 throw new Exception("Username has been already used. ");
+            }
+
+            var isExistEmail = await _userRepository.AnyAsync(x => x.Email == dto.Email);
+            if (isExistEmail)
+            {
+                throw new Exception("Email has been already used. ");
             }
 
             var role = await _roleRepository.FirstOrDefaultAsync(x => x.Name == RoleName.NormalUser && x.Status == (int)CommonStatus.Active);
@@ -53,6 +59,7 @@ namespace MedicalAssistant.Application.Services
             user.IdUser = idUser;
             user.IdRole = role.IdRole;
             user.FullName = dto.FullName;
+            user.Email = dto.Email;
             user.Username = dto.Username;
             user.Password = _passwordHasher.HashPassword(user, dto.Password);
             user.Status = (int)CommonStatus.Active;
