@@ -1,6 +1,7 @@
 ﻿using MedicalAssistant.API.Filters;
 using MedicalAssistant.Application.Interfaces;
 using MedicalAssistant.Application.Services;
+using MedicalAssistant.Infrastructure.ExternalServices;
 using MedicalAssistant.Domain.Entities;
 using MedicalAssistant.Domain.Interfaces;
 using MedicalAssistant.Infrastructure.Repositories;

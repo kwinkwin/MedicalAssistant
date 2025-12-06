@@ -9,7 +9,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MedicalAssistant.Application.Services
+namespace MedicalAssistant.Infrastructure.ExternalServices
 {
     public class FastAiService : IAiService
     {
