@@ -36,6 +36,11 @@ namespace MedicalAssistant.Application.Services
         }
         public async Task<string> SignUpAsync(SignUpUserDto dto)
         {
+            if (dto.FullName == null || dto.Email == null || dto.Username == null || dto.Password == null)
+            {
+                throw new Exception("Please fill all information.");
+            }
+
             var isExistUsername = await _userRepository.AnyAsync(x => x.Username == dto.Username);
             if (isExistUsername)
             {

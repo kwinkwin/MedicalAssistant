@@ -85,6 +85,10 @@ namespace MedicalAssistant.Application.Services
         public async Task<MessageDto> SendMessageAsync(SendMessageRequest request)
         {
             var userId = Guid.Parse(_currentUserService.IdUser);
+            if (request.MessageContent == null)
+            {
+                throw new Exception("Message content cannot be empty.");
+            }
             Conversation conversation;
 
             // Xử lý conservation
